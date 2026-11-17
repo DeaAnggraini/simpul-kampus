@@ -17,7 +17,9 @@ class Pengguna {
 
 class AuthService extends ChangeNotifier {
   AuthService(this._api, {SharedPreferencesAsync? prefs})
-      : _prefs = prefs ?? SharedPreferencesAsync();
+      : _prefs = prefs ?? SharedPreferencesAsync() {
+    _api.saatSesiHabis = keluar; 
+  }
 
   final ApiClient _api;
   final SharedPreferencesAsync _prefs;

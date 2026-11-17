@@ -15,6 +15,9 @@ class ApiClient {
   final http.Client _client;
   String? token;
 
+  /// Dipanggil bila server menjawab 401 saat sudah login (sesi habis).
+  Future<void> Function()? saatSesiHabis;
+
   Future<Map<String, dynamic>> kirim(
     String metode,
     String jalur, {
@@ -45,6 +48,9 @@ class ApiClient {
     }
 
     if (res.statusCode >= 400) {
+      if (res.statusCode == 401 && token != null && jalur != 'keluar.php') {
+        await saatSesiHabis?.call();
+      }
       throw ApiGagal(
         data['pesan'] as String? ?? 'Terjadi kesalahan (${res.statusCode}).',
         status: res.statusCode,
