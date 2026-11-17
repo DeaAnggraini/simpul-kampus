@@ -11,10 +11,14 @@ import 'halaman_riwayat.dart';
 import 'kerangka_navigasi.dart';
 import 'halaman_krs.dart';
 import 'krs.dart';
+import 'halaman_detail_kelas.dart';
+import 'halaman_kelas.dart';
+import 'kelas.dart';
 
 GoRouter buatRouter(ApiClient api, AuthService auth) {
   final repo = AkademikRepository(api);
   final krsRepo = KrsRepository(api);
+  final kelasRepo = KelasRepository(api);
   return GoRouter(
     initialLocation: '/',
     refreshListenable: auth, // router menilai ulang saat status login berubah
@@ -23,6 +27,7 @@ GoRouter buatRouter(ApiClient api, AuthService auth) {
       final diLogin = state.matchedLocation == '/masuk';
       if (!sudahMasuk) return diLogin ? null : '/masuk';
       if (diLogin) return '/';
+      if (auth.pengguna?.peran == 'dosen' && state.matchedLocation == '/') return '/kelas';
       return null;
     },
     routes: [
@@ -47,6 +52,21 @@ GoRouter buatRouter(ApiClient api, AuthService auth) {
               ],
             ),
           ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: '/kelas',
+              builder: (c, s) => HalamanKelas(repo: kelasRepo),
+              routes: [
+                GoRoute(
+                  path: ':id',
+                  builder: (c, s) => HalamanDetailKelas(
+                    repo: kelasRepo,
+                    kelasId: int.tryParse(s.pathParameters['id'] ?? '') ?? 0,
+                  ),
+                ),
+              ],
+            ),
+          ]),          
           StatefulShellBranch(routes: [
             GoRoute(
               path: '/akun',

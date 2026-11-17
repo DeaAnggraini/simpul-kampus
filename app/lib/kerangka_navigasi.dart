@@ -8,6 +8,7 @@ class KerangkaNavigasi extends StatelessWidget {
   static const _tujuan = [
     (ikon: Icons.home_outlined, aktif: Icons.home, label: 'Beranda'),
     (ikon: Icons.school_outlined, aktif: Icons.school, label: 'Akademik'),
+    (ikon: Icons.groups_outlined, aktif: Icons.groups, label: 'Kelas'),
     (ikon: Icons.person_outline, aktif: Icons.person, label: 'Akun'),
   ];
 

@@ -1,5 +1,5 @@
 api/koneksi.php
-api/seed.php
+api/seed*.php
 app/build/
 app/.dart_tool/
 key.properties

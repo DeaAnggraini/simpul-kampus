@@ -62,15 +62,15 @@ class _HalamanLoginState extends State<HalamanLogin> {
                     const SizedBox(height: 24),
                     TextFormField(
                       controller: _nim,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                       decoration: const InputDecoration(
-                        labelText: 'NIM',
+                        labelText: 'NIM atau NIP',
                         prefixIcon: Icon(Icons.badge_outlined),
                         border: OutlineInputBorder(),
                       ),
                       validator: (v) =>
-                          (v ?? '').trim().isEmpty ? 'NIM wajib diisi' : null,
+                          (v ?? '').trim().isEmpty ? 'NIM atau NIP wajib diisi' : null,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
