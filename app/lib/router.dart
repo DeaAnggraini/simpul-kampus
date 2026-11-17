@@ -9,9 +9,12 @@ import 'halaman_khs.dart';
 import 'halaman_login.dart';
 import 'halaman_riwayat.dart';
 import 'kerangka_navigasi.dart';
+import 'halaman_krs.dart';
+import 'krs.dart';
 
 GoRouter buatRouter(ApiClient api, AuthService auth) {
   final repo = AkademikRepository(api);
+  final krsRepo = KrsRepository(api);
   return GoRouter(
     initialLocation: '/',
     refreshListenable: auth, // router menilai ulang saat status login berubah
@@ -40,6 +43,7 @@ GoRouter buatRouter(ApiClient api, AuthService auth) {
               routes: [
                 GoRoute(path: 'khs', builder: (c, s) => HalamanKhs(repo: repo)),
                 GoRoute(path: 'riwayat', builder: (c, s) => HalamanRiwayat(repo: repo)),
+                GoRoute(path: 'krs', builder: (c, s) => HalamanKrs(repo: krsRepo)),
               ],
             ),
           ]),

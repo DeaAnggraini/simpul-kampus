@@ -24,11 +24,12 @@ class HalamanAkademik extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right),
             onTap: () => context.push('/akademik/riwayat'),
           ),
-          const ListTile(
-            enabled: false,
-            leading: Icon(Icons.edit_note),
-            title: Text('Pengisian KRS'),
-            subtitle: Text('Segera hadir'),
+          ListTile(
+            leading: const Icon(Icons.edit_note),
+            title: const Text('Pengisian KRS'),
+            subtitle: const Text('Pilih kelas semester ini'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.push('/akademik/krs'),
           ),
         ],
       ),
