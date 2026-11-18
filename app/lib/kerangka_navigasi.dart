@@ -9,6 +9,7 @@ class KerangkaNavigasi extends StatelessWidget {
     (ikon: Icons.home_outlined, aktif: Icons.home, label: 'Beranda'),
     (ikon: Icons.school_outlined, aktif: Icons.school, label: 'Akademik'),
     (ikon: Icons.groups_outlined, aktif: Icons.groups, label: 'Kelas'),
+    (ikon: Icons.apps_outlined, aktif: Icons.apps, label: 'Layanan'),
     (ikon: Icons.person_outline, aktif: Icons.person, label: 'Akun'),
   ];
 

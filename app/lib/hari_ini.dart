@@ -70,6 +70,48 @@ class RingkasanHarian {
   final int pengumuman, tugas, belumDibaca;
 }
 
+class TagihanRingkas {
+  const TagihanRingkas({
+    required this.id,
+    required this.jenis,
+    required this.nominal,
+    required this.jatuhTempo,
+    required this.terlambat,
+  });
+  final int id, nominal;
+  final String jenis, jatuhTempo;
+  final bool terlambat;
+
+  factory TagihanRingkas.dariJson(Map<String, dynamic> j) => TagihanRingkas(
+        id: keInt(j['id']),
+        jenis: j['jenis'] as String,
+        nominal: keInt(j['nominal']),
+        jatuhTempo: j['jatuh_tempo'] as String,
+        terlambat: j['terlambat'] == true,
+      );
+}
+
+class BukuJatuhTempo {
+  const BukuJatuhTempo({
+    required this.id,
+    required this.judul,
+    required this.jatuhTempo,
+    required this.terlambat,
+    required this.sisaJam,
+  });
+  final int id, sisaJam;
+  final String judul, jatuhTempo;
+  final bool terlambat;
+
+  factory BukuJatuhTempo.dariJson(Map<String, dynamic> j) => BukuJatuhTempo(
+        id: keInt(j['id']),
+        judul: j['judul'] as String,
+        jatuhTempo: j['jatuh_tempo'] as String,
+        terlambat: j['terlambat'] == true,
+        sisaJam: keInt(j['sisa_jam']),
+      );
+}
+
 class HariIni {
   const HariIni({
     required this.nama,
@@ -79,6 +121,8 @@ class HariIni {
     required this.tugas,
     required this.info,
     required this.ringkasan,
+    required this.tagihan,
+    required this.buku,
   });
   final String nama;
   final double ipk;
@@ -87,6 +131,8 @@ class HariIni {
   final List<TugasMendesak> tugas;
   final List<InfoKampus> info;
   final RingkasanHarian ringkasan;
+  final List<TagihanRingkas> tagihan;
+  final List<BukuJatuhTempo> buku;
 
   factory HariIni.dariJson(Map<String, dynamic> j) {
     final r = j['ringkasan'] as Map<String, dynamic>;
@@ -97,6 +143,8 @@ class HariIni {
       jadwal: [for (final x in j['jadwal'] as List) JadwalHariIni.dariJson(x as Map<String, dynamic>)],
       tugas: [for (final x in j['tugas'] as List) TugasMendesak.dariJson(x as Map<String, dynamic>)],
       info: [for (final x in j['info'] as List) InfoKampus.dariJson(x as Map<String, dynamic>)],
+      tagihan: [for (final x in j['tagihan'] as List) TagihanRingkas.dariJson(x as Map<String, dynamic>)],
+      buku: [for (final x in j['buku'] as List) BukuJatuhTempo.dariJson(x as Map<String, dynamic>)],
       ringkasan: RingkasanHarian(
         pengumuman: keInt(r['pengumuman']),
         tugas: keInt(r['tugas']),

@@ -2,25 +2,34 @@ import 'package:go_router/go_router.dart';
 import 'akademik.dart';
 import 'api_client.dart';
 import 'auth_service.dart';
+import 'berita.dart';
 import 'halaman_akademik.dart';
 import 'halaman_akun.dart';
+import 'halaman_berita.dart';
+import 'halaman_detail_berita.dart';
 import 'halaman_detail_kelas.dart';
 import 'halaman_hari_ini.dart';
+import 'halaman_kartu.dart';
 import 'halaman_kelas.dart';
 import 'halaman_kelulusan.dart';
+import 'halaman_keuangan.dart';
 import 'halaman_khs.dart';
 import 'halaman_krs.dart';
+import 'halaman_layanan.dart';
 import 'halaman_login.dart';
 import 'halaman_notifikasi.dart';
 import 'halaman_pengaturan_notifikasi.dart';
+import 'halaman_perpustakaan.dart';
 import 'halaman_riwayat.dart';
 import 'halaman_simulasi.dart';
 import 'hari_ini.dart';
 import 'kelas.dart';
 import 'kelulusan.dart';
 import 'kerangka_navigasi.dart';
+import 'keuangan.dart';
 import 'krs.dart';
 import 'notifikasi.dart';
+import 'perpustakaan.dart';
 
 GoRouter buatRouter(ApiClient api, AuthService auth) {
   final akademikRepo = AkademikRepository(api);
@@ -29,6 +38,9 @@ GoRouter buatRouter(ApiClient api, AuthService auth) {
   final hariIniRepo = HariIniRepository(api);
   final notifRepo = NotifikasiRepository(api);
   final kelulusanRepo = KelulusanRepository(api);
+  final keuanganRepo = KeuanganRepository(api);
+  final perpusRepo = PerpustakaanRepository(api);
+  final beritaRepo = BeritaRepository(api);
 
   return GoRouter(
     initialLocation: '/',
@@ -38,7 +50,9 @@ GoRouter buatRouter(ApiClient api, AuthService auth) {
       final diLogin = state.matchedLocation == '/masuk';
       if (!sudahMasuk) return diLogin ? null : '/masuk';
       if (diLogin) return '/';
-      if (auth.pengguna?.peran == 'dosen' && state.matchedLocation == '/') return '/kelas';
+      final peran = auth.pengguna?.peran;
+      if (peran == 'dosen' && state.matchedLocation == '/') return '/kelas';
+      if (peran == 'admin' && state.matchedLocation == '/') return '/layanan/berita';
       return null;
     },
     routes: [
@@ -83,6 +97,36 @@ GoRouter buatRouter(ApiClient api, AuthService auth) {
                     repo: kelasRepo,
                     kelasId: int.tryParse(s.pathParameters['id'] ?? '') ?? 0,
                   ),
+                ),
+              ],
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: '/layanan',
+              builder: (c, s) => const HalamanLayanan(),
+              routes: [
+                GoRoute(path: 'keuangan', builder: (c, s) => HalamanKeuangan(repo: keuanganRepo)),
+                GoRoute(
+                  path: 'perpustakaan',
+                  builder: (c, s) => HalamanPerpustakaan(
+                    repo: perpusRepo,
+                    tabAwal: int.tryParse(s.uri.queryParameters['tab'] ?? '') ?? 0,
+                  ),
+                ),
+                GoRoute(path: 'kartu', builder: (c, s) => HalamanKartu(repo: akademikRepo)),
+                GoRoute(
+                  path: 'berita',
+                  builder: (c, s) => HalamanBerita(repo: beritaRepo),
+                  routes: [
+                    GoRoute(
+                      path: ':id',
+                      builder: (c, s) => HalamanDetailBerita(
+                        repo: beritaRepo,
+                        id: int.tryParse(s.pathParameters['id'] ?? '') ?? 0,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

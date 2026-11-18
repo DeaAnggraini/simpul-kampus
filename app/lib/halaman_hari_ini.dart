@@ -1,3 +1,4 @@
+import 'format.dart';
 import 'dart:async';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
@@ -137,6 +138,37 @@ class _HalamanHariIniState extends State<HalamanHariIni> {
                 onTap: () => context.go('/kelas/${t.kelasId}'),
               ),
             ),
+          if (d.tagihan.isNotEmpty) ...[
+            _judul('Tagihan'),
+            for (final t in d.tagihan)
+              Card(
+                child: ListTile(
+                  leading: Icon(Icons.receipt_long_outlined, color: t.terlambat ? skema.error : null),
+                  title: Text('${t.jenis} · ${t.nominal.rupiah}'),
+                  subtitle: Text('Jatuh tempo ${formatWaktu(t.jatuhTempo)}'),
+                  trailing: t.terlambat
+                      ? Text('Terlambat', style: TextStyle(color: skema.error))
+                      : null,
+                  onTap: () => context.go('/layanan/keuangan'),
+                ),
+              ),
+          ],
+          if (d.buku.isNotEmpty) ...[
+            _judul('Buku perpustakaan'),
+            for (final b in d.buku)
+              Card(
+                child: ListTile(
+                  leading: Icon(Icons.menu_book_outlined, color: b.terlambat ? skema.error : null),
+                  title: Text(b.judul),
+                  subtitle: Text('Jatuh tempo ${formatWaktu(b.jatuhTempo)}'),
+                  trailing: Text(
+                    b.terlambat ? 'Terlambat' : sisaWaktu(b.sisaJam),
+                    style: TextStyle(color: b.terlambat ? skema.error : null),
+                  ),
+                  onTap: () => context.go('/layanan/perpustakaan?tab=1'),
+                ),
+              ),
+          ],
           _judul('Informasi kampus'),
           if (d.info.isEmpty) _kosong('Belum ada informasi.'),
           for (final i in d.info) Card(child: ListTile(title: Text(i.judul), subtitle: Text(i.isi))),
