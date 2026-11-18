@@ -21,3 +21,16 @@ function aksesKelas(array $saya, int $kelasId): ?array
     }
     return $q->fetch() ?: null;
 }
+
+/** Kirim notifikasi ke anggota kelas, kecuali yang mematikan notifikasi kelas itu. */
+function buatNotifikasiKelas(int $kelasId, string $jenis, string $judul, string $isi): void
+{
+    db()->prepare(
+        'INSERT INTO notifikasi (pengguna_id, kelas_id, jenis, judul, isi)
+         SELECT r.mahasiswa_id, r.kelas_id, ?, ?, ?
+         FROM krs r
+         LEFT JOIN preferensi_notifikasi p
+                ON p.pengguna_id = r.mahasiswa_id AND p.kelas_id = r.kelas_id
+         WHERE r.kelas_id = ? AND COALESCE(p.aktif, 1) = 1'
+    )->execute([$jenis, $judul, mb_substr($isi, 0, 255), $kelasId]);
+}

@@ -15,4 +15,5 @@ if ($isi === '' || mb_strlen($isi) > 1000) {
 }
 db()->prepare('INSERT INTO pengumuman_kelas (kelas_id, penulis_id, isi) VALUES (?, ?, ?)')
     ->execute([$kelas['id'], $saya['id'], $isi]);
+buatNotifikasiKelas((int) $kelas['id'], 'pengumuman', 'Pengumuman ' . $kelas['mk_nama'], $isi);
 kirim(201, ['pesan' => 'Pengumuman terkirim.']);

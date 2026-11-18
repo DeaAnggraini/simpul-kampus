@@ -28,4 +28,5 @@ if (!(int) $q->fetchColumn()) kirim(422, ['pesan' => 'Tenggat harus di masa depa
 
 db()->prepare('INSERT INTO tugas (kelas_id, judul, deskripsi, tenggat) VALUES (?, ?, ?, ?)')
     ->execute([$kelas['id'], $judul, $deskripsi === '' ? null : $deskripsi, $tenggat]);
+buatNotifikasiKelas((int) $kelas['id'], 'tugas', 'Tugas baru ' . $kelas['mk_nama'], $judul);
 kirim(201, ['pesan' => 'Tugas dibuat.']);
