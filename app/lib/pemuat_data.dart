@@ -17,7 +17,11 @@ class _PemuatDataState<T> extends State<PemuatData<T>> {
     _future = widget.ambil();
   }
 
-  void _muatUlang() => setState(() => _future = widget.ambil());
+  void _muatUlang() {
+    setState(() {
+      _future = widget.ambil();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +39,18 @@ class _PemuatDataState<T> extends State<PemuatData<T>> {
                   const SizedBox(height: 12),
                   Text('${snap.error}', textAlign: TextAlign.center),
                   const SizedBox(height: 12),
-                  FilledButton(onPressed: _muatUlang, child: const Text('Coba lagi')),
+                  FilledButton(
+                    onPressed: _muatUlang,
+                    child: const Text('Coba lagi'),
+                  ),
                 ],
               ),
             ),
           );
         }
-        if (!snap.hasData) return const Center(child: CircularProgressIndicator());
+        if (!snap.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
         return RefreshIndicator(
           onRefresh: () async => _muatUlang(),
           child: widget.builder(context, snap.data as T),

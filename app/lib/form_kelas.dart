@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+
 import 'kelas.dart';
 
 /// Lembar bawah berisi satu kolom teks. Mengembalikan teks, atau null bila ditutup.
@@ -15,7 +16,12 @@ Future<String?> tampilkanFormTeks(
     isScrollControlled: true,
     showDragHandle: true,
     builder: (_) => _FormTeks(
-        judul: judul, label: label, awal: awal, tombol: tombol, maksimal: maksimal),
+      judul: judul,
+      label: label,
+      awal: awal,
+      tombol: tombol,
+      maksimal: maksimal,
+    ),
   );
 }
 
@@ -55,7 +61,12 @@ class _FormTeksState extends State<_FormTeks> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(16, 0, 16, 16 + MediaQuery.viewInsetsOf(context).bottom),
+      padding: EdgeInsets.fromLTRB(
+        16,
+        0,
+        16,
+        16 + MediaQuery.viewInsetsOf(context).bottom,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -126,7 +137,15 @@ class _FormTugasState extends State<_FormTugas> {
       initialTime: const TimeOfDay(hour: 23, minute: 59),
     );
     if (jam == null || !mounted) return;
-    setState(() => _tenggat = DateTime(tgl.year, tgl.month, tgl.day, jam.hour, jam.minute));
+    setState(
+      () => _tenggat = DateTime(
+        tgl.year,
+        tgl.month,
+        tgl.day,
+        jam.hour,
+        jam.minute,
+      ),
+    );
   }
 
   void _kirim() {
@@ -140,15 +159,23 @@ class _FormTugasState extends State<_FormTugas> {
       setState(() => _galat = 'Pilih tenggat dulu');
       return;
     }
-    Navigator.pop(context,
-        (judul: judul, deskripsi: _deskripsi.text.trim(), tenggat: keFormatServer(tenggat)));
+    Navigator.pop(context, (
+      judul: judul,
+      deskripsi: _deskripsi.text.trim(),
+      tenggat: keFormatServer(tenggat),
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
     final t = _tenggat;
     return SingleChildScrollView(
-      padding: EdgeInsets.fromLTRB(16, 0, 16, 16 + MediaQuery.viewInsetsOf(context).bottom),
+      padding: EdgeInsets.fromLTRB(
+        16,
+        0,
+        16,
+        16 + MediaQuery.viewInsetsOf(context).bottom,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -158,7 +185,10 @@ class _FormTugasState extends State<_FormTugas> {
           TextField(
             controller: _judul,
             maxLength: 150,
-            decoration: const InputDecoration(labelText: 'Judul', border: OutlineInputBorder()),
+            decoration: const InputDecoration(
+              labelText: 'Judul',
+              border: OutlineInputBorder(),
+            ),
           ),
           const SizedBox(height: 8),
           TextField(
@@ -166,18 +196,28 @@ class _FormTugasState extends State<_FormTugas> {
             minLines: 2,
             maxLines: 4,
             maxLength: 2000,
-            decoration: const InputDecoration(labelText: 'Deskripsi (opsional)', border: OutlineInputBorder()),
+            decoration: const InputDecoration(
+              labelText: 'Deskripsi (opsional)',
+              border: OutlineInputBorder(),
+            ),
           ),
           const SizedBox(height: 8),
           OutlinedButton.icon(
             onPressed: _pilihTenggat,
             icon: const Icon(Icons.event),
-            label: Text(t == null ? 'Pilih tenggat' : 'Tenggat ${formatWaktu(keFormatServer(t))}'),
+            label: Text(
+              t == null
+                  ? 'Pilih tenggat'
+                  : 'Tenggat ${formatWaktu(keFormatServer(t))}',
+            ),
           ),
           if (_galat != null)
             Padding(
               padding: const EdgeInsets.only(top: 8),
-              child: Text(_galat!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+              child: Text(
+                _galat!,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
             ),
           const SizedBox(height: 12),
           FilledButton(onPressed: _kirim, child: const Text('Buat tugas')),

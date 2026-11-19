@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+
 import 'berita.dart';
 
 typedef DataBerita = ({String judul, String kategori, String isi});
@@ -44,7 +45,12 @@ class _FormBeritaState extends State<_FormBerita> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.fromLTRB(16, 0, 16, 16 + MediaQuery.viewInsetsOf(context).bottom),
+      padding: EdgeInsets.fromLTRB(
+        16,
+        0,
+        16,
+        16 + MediaQuery.viewInsetsOf(context).bottom,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -54,13 +60,22 @@ class _FormBeritaState extends State<_FormBerita> {
           TextField(
             controller: _judul,
             maxLength: 150,
-            decoration: const InputDecoration(labelText: 'Judul', border: OutlineInputBorder()),
+            decoration: const InputDecoration(
+              labelText: 'Judul',
+              border: OutlineInputBorder(),
+            ),
           ),
           const SizedBox(height: 8),
           DropdownButtonFormField<String>(
             initialValue: _kategori,
-            decoration: const InputDecoration(labelText: 'Kategori', border: OutlineInputBorder()),
-            items: [for (final k in kategoriBerita) DropdownMenuItem(value: k, child: Text(k))],
+            decoration: const InputDecoration(
+              labelText: 'Kategori',
+              border: OutlineInputBorder(),
+            ),
+            items: [
+              for (final k in kategoriBerita)
+                DropdownMenuItem(value: k, child: Text(k)),
+            ],
             onChanged: (v) => setState(() => _kategori = v ?? _kategori),
           ),
           const SizedBox(height: 16),
@@ -69,12 +84,18 @@ class _FormBeritaState extends State<_FormBerita> {
             minLines: 4,
             maxLines: 8,
             maxLength: 5000,
-            decoration: const InputDecoration(labelText: 'Isi berita', border: OutlineInputBorder()),
+            decoration: const InputDecoration(
+              labelText: 'Isi berita',
+              border: OutlineInputBorder(),
+            ),
           ),
           if (_galat != null)
             Padding(
               padding: const EdgeInsets.only(top: 8),
-              child: Text(_galat!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+              child: Text(
+                _galat!,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
             ),
           const SizedBox(height: 12),
           FilledButton(onPressed: _kirim, child: const Text('Terbitkan')),

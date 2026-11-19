@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+
 import 'api_client.dart';
 import 'krs.dart';
 
@@ -31,7 +32,10 @@ class _HalamanKrsState extends State<HalamanKrs> {
         _galat = null;
         _dipilih
           ..clear()
-          ..addAll([for (final k in data.kelas) if (k.diambil) k.kelasId]);
+          ..addAll([
+            for (final k in data.kelas)
+              if (k.diambil) k.kelasId,
+          ]);
       });
     } on ApiGagal catch (e) {
       if (mounted) setState(() => _galat = e.pesan);
@@ -41,9 +45,9 @@ class _HalamanKrsState extends State<HalamanKrs> {
   }
 
   List<KelasTawaran> get _terpilih => [
-        for (final k in _data?.kelas ?? const <KelasTawaran>[])
-          if (_dipilih.contains(k.kelasId)) k
-      ];
+    for (final k in _data?.kelas ?? const <KelasTawaran>[])
+      if (_dipilih.contains(k.kelasId)) k,
+  ];
 
   int _total(Iterable<KelasTawaran> daftar) =>
       daftar.fold(0, (s, k) => s + k.sks);
@@ -54,11 +58,16 @@ class _HalamanKrsState extends State<HalamanKrs> {
     if (k.sudahLulus) return 'Sudah lulus';
     if (k.penuh) return 'Kelas penuh';
     // Kelas lain dari mata kuliah yang sama akan digantikan, jadi tidak dihitung
-    final lain = [for (final x in _terpilih) if (x.mkId != k.mkId) x];
+    final lain = [
+      for (final x in _terpilih)
+        if (x.mkId != k.mkId) x,
+    ];
     for (final x in lain) {
       if (k.bentrok(x)) return 'Bentrok dengan ${x.nama}';
     }
-    if (_total(lain) + k.sks > (_data?.batasSks ?? 0)) return 'Melebihi batas SKS';
+    if (_total(lain) + k.sks > (_data?.batasSks ?? 0)) {
+      return 'Melebihi batas SKS';
+    }
     return null;
   }
 
@@ -66,8 +75,11 @@ class _HalamanKrsState extends State<HalamanKrs> {
     setState(() {
       if (pilih == true) {
         // Satu mata kuliah hanya satu kelas
-        _dipilih.removeWhere((id) => (_data?.kelas ?? const <KelasTawaran>[])
-            .any((x) => x.kelasId == id && x.mkId == k.mkId));
+        _dipilih.removeWhere(
+          (id) => (_data?.kelas ?? const <KelasTawaran>[]).any(
+            (x) => x.kelasId == id && x.mkId == k.mkId,
+          ),
+        );
         _dipilih.add(k.kelasId);
       } else {
         _dipilih.remove(k.kelasId);
@@ -80,9 +92,8 @@ class _HalamanKrsState extends State<HalamanKrs> {
     try {
       final total = await widget.repo.simpan(_dipilih.toList());
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('KRS tersimpan ($total SKS).')),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('KRS tersimpan ($total SKS).')));
       await _muat();
     } on ApiGagal catch (e) {
       if (!mounted) return;
@@ -136,7 +147,10 @@ class _HalamanKrsState extends State<HalamanKrs> {
             children: [
               const Icon(Icons.cloud_off, size: 48),
               const SizedBox(height: 12),
-              Text(_galat ?? 'Data tidak tersedia.', textAlign: TextAlign.center),
+              Text(
+                _galat ?? 'Data tidak tersedia.',
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(height: 12),
               FilledButton(
                 onPressed: () {
@@ -159,7 +173,10 @@ class _HalamanKrsState extends State<HalamanKrs> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('KRS ${data.tahun}', style: Theme.of(context).textTheme.titleMedium),
+              Text(
+                'KRS ${data.tahun}',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               const SizedBox(height: 8),
               LinearProgressIndicator(value: total / data.batasSks),
               const SizedBox(height: 4),
@@ -168,6 +185,13 @@ class _HalamanKrsState extends State<HalamanKrs> {
           ),
         ),
         const Divider(height: 1),
+        if (data.kelas.isEmpty)
+          const Padding(
+            padding: EdgeInsets.all(24),
+            child: Text(
+              'Belum ada kelas yang ditawarkan untuk kurikulum Anda.',
+            ),
+          ),
         for (final k in data.kelas) _baris(k),
       ],
     );

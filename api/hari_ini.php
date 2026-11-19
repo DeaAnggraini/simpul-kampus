@@ -49,6 +49,32 @@ $q = $pdo->prepare(
 $q->execute([$mhs]);
 $r = $q->fetch();
 
+$q = $pdo->prepare(
+    'SELECT id, jenis, nominal, jatuh_tempo, (jatuh_tempo < NOW()) AS terlambat
+     FROM tagihan WHERE mahasiswa_id = ? AND status = "belum"
+     ORDER BY jatuh_tempo LIMIT 3'
+);
+$q->execute([$mhs]);
+$tagihan = $q->fetchAll();
+foreach ($tagihan as &$t) {
+    $t['nominal'] = (int) $t['nominal'];
+    $t['terlambat'] = (bool) $t['terlambat'];
+}
+unset($t);
+
+$q = $pdo->prepare(
+    'SELECT p.id, b.judul, p.jatuh_tempo, (p.jatuh_tempo < NOW()) AS terlambat,
+            TIMESTAMPDIFF(HOUR, NOW(), p.jatuh_tempo) AS sisa_jam
+     FROM peminjaman p JOIN buku b ON b.id = p.buku_id
+     WHERE p.mahasiswa_id = ? AND p.dikembalikan IS NULL
+       AND p.jatuh_tempo < NOW() + INTERVAL 3 DAY
+     ORDER BY p.jatuh_tempo LIMIT 3'
+);
+$q->execute([$mhs]);
+$buku = $q->fetchAll();
+foreach ($buku as &$b) $b['terlambat'] = (bool) $b['terlambat'];
+unset($b);
+
 kirim(200, [
     'nama' => $saya['nama'],
     'ipk' => $nilai['ipk'],
@@ -56,6 +82,8 @@ kirim(200, [
     'jadwal' => $jadwal,
     'tugas' => $tugas,
     'info' => $info,
+    'tagihan' => $tagihan,
+    'buku' => $buku,
     'ringkasan' => [
         'pengumuman' => (int) $r['pengumuman'],
         'tugas' => (int) $r['tugas'],

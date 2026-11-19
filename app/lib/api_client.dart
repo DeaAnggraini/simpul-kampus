@@ -1,5 +1,7 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
+
 import 'api_config.dart';
 
 class ApiGagal implements Exception {
@@ -33,18 +35,26 @@ class ApiClient {
 
     final http.Response res;
     try {
-      final stream = await _client.send(req).timeout(const Duration(seconds: 10));
+      final stream = await _client
+          .send(req)
+          .timeout(const Duration(seconds: 10));
       res = await http.Response.fromStream(stream);
     } on Exception {
-      throw ApiGagal('Server tidak dapat dihubungi. Periksa XAMPP dan alamat API.');
+      throw ApiGagal(
+        'Server tidak dapat dihubungi. Periksa XAMPP dan alamat API.',
+      );
     }
 
     final Map<String, dynamic> data;
     try {
-      data = res.body.isEmpty ? {} : jsonDecode(res.body) as Map<String, dynamic>;
+      data = res.body.isEmpty
+          ? {}
+          : jsonDecode(res.body) as Map<String, dynamic>;
     } on FormatException {
-      throw ApiGagal('Jawaban server bukan JSON. Periksa kode PHP.',
-          status: res.statusCode);
+      throw ApiGagal(
+        'Jawaban server bukan JSON. Periksa kode PHP.',
+        status: res.statusCode,
+      );
     }
 
     if (res.statusCode >= 400) {

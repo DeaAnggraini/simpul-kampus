@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+
 import 'kelulusan.dart';
 import 'pemuat_data.dart';
 import 'simulasi_ip.dart';
@@ -41,16 +42,15 @@ class _IsiSimulasiState extends State<_IsiSimulasi> {
   }
 
   String _teksHasil(HasilSimulasi h) => switch (h.status) {
-        StatusSimulasi.tanpaSisa =>
-          'Semua SKS target sudah bernilai, IPK tidak dapat diubah lagi.',
-        StatusSimulasi.sudahTercapai =>
-          'Target sudah pasti tercapai. Nilai berapa pun pada sisa SKS tidak menurunkan IPK di bawah target.',
-        StatusSimulasi.mustahil =>
-          'Target tidak dapat dicapai. Dibutuhkan rata-rata IPS ${h.ipsDibutuhkan.toStringAsFixed(2)}, padahal nilai tertinggi 4,00.',
-        StatusSimulasi.mungkin =>
-          'Dibutuhkan rata-rata IPS ${h.ipsDibutuhkan.toStringAsFixed(2)} pada sisa ${h.sksSisa} SKS.\n'
-              'Contoh komposisi nilai ${h.komposisi}.',
-      };
+    StatusSimulasi.tanpaSisa =>
+      'Semua SKS target sudah bernilai, IPK tidak dapat diubah lagi.',
+    StatusSimulasi.sudahTercapai => 'Target sudah pasti tercapai. Nilai berapa pun pada sisa SKS tidak menurunkan IPK di bawah target.',
+    StatusSimulasi.mustahil =>
+      'Target tidak dapat dicapai. Dibutuhkan rata-rata IPS ${h.ipsDibutuhkan.toStringAsFixed(2)}, padahal nilai tertinggi 4,00.',
+    StatusSimulasi.mungkin =>
+      'Dibutuhkan rata-rata IPS ${h.ipsDibutuhkan.toStringAsFixed(2)} pada sisa ${h.sksSisa} SKS.\n'
+          'Contoh komposisi nilai ${h.komposisi}.',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,9 @@ class _IsiSimulasiState extends State<_IsiSimulasi> {
         Card(
           child: ListTile(
             title: Text('IPK saat ini ${d.ipk.toStringAsFixed(2)}'),
-            subtitle: Text('${d.sksBernilai} SKS sudah bernilai dari target ${d.sksTarget} SKS'),
+            subtitle: Text(
+              '${d.sksBernilai} SKS sudah bernilai dari target ${d.sksTarget} SKS',
+            ),
           ),
         ),
         const SizedBox(height: 16),
@@ -89,10 +91,15 @@ class _IsiSimulasiState extends State<_IsiSimulasi> {
         if (hasil != null)
           Card(
             color: Theme.of(context).colorScheme.primaryContainer,
-            child: Padding(padding: const EdgeInsets.all(16), child: Text(_teksHasil(hasil))),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(_teksHasil(hasil)),
+            ),
           ),
         const SizedBox(height: 8),
-        const Text('Bobot nilai A 4, B 3, C 2, D 1, E 0. Hitungan mengandaikan seluruh SKS target ditempuh.'),
+        const Text(
+          'Bobot nilai A 4, B 3, C 2, D 1, E 0. Hitungan mengandaikan seluruh SKS target ditempuh.',
+        ),
       ],
     );
   }

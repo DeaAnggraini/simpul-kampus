@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+
 import 'api_client.dart';
 import 'auth_service.dart';
 
@@ -54,11 +55,16 @@ class _HalamanLoginState extends State<HalamanLogin> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text('Simpul Kampus',
-                        style: teks.headlineMedium, textAlign: TextAlign.center),
+                    Text(
+                      'Simpul Kampus',
+                      style: teks.headlineMedium,
+                      textAlign: TextAlign.center,
+                    ),
                     const SizedBox(height: 4),
-                    Text('Masuk untuk melanjutkan',
-                        textAlign: TextAlign.center),
+                    Text(
+                      'Masuk untuk melanjutkan',
+                      textAlign: TextAlign.center,
+                    ),
                     const SizedBox(height: 24),
                     TextFormField(
                       controller: _nim,
@@ -69,8 +75,9 @@ class _HalamanLoginState extends State<HalamanLogin> {
                         prefixIcon: Icon(Icons.badge_outlined),
                         border: OutlineInputBorder(),
                       ),
-                      validator: (v) =>
-                          (v ?? '').trim().isEmpty ? 'NIM atau NIP wajib diisi' : null,
+                      validator: (v) => (v ?? '').trim().isEmpty
+                          ? 'NIM atau NIP wajib diisi'
+                          : null,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
@@ -89,16 +96,20 @@ class _HalamanLoginState extends State<HalamanLogin> {
                     if (_galat != null)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 12),
-                        child: Text(_galat!,
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.error)),
+                        child: Text(
+                          _galat!,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.error,
+                          ),
+                        ),
                       ),
                     FilledButton(
                       onPressed: _memuat ? null : _kirim,
                       child: _memuat
                           ? const SizedBox.square(
                               dimension: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2))
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
                           : const Text('Masuk'),
                     ),
                   ],

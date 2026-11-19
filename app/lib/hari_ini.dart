@@ -22,14 +22,14 @@ class JadwalHariIni {
   final String nama, kelas, dosen, mulai, selesai, ruang;
 
   factory JadwalHariIni.dariJson(Map<String, dynamic> j) => JadwalHariIni(
-        kelasId: keInt(j['kelas_id']),
-        nama: j['nama'] as String,
-        kelas: j['kelas'] as String,
-        dosen: j['dosen'] as String,
-        mulai: _hhmm(j['jam_mulai'] as String),
-        selesai: _hhmm(j['jam_selesai'] as String),
-        ruang: j['ruang'] as String,
-      );
+    kelasId: keInt(j['kelas_id']),
+    nama: j['nama'] as String,
+    kelas: j['kelas'] as String,
+    dosen: j['dosen'] as String,
+    mulai: _hhmm(j['jam_mulai'] as String),
+    selesai: _hhmm(j['jam_selesai'] as String),
+    ruang: j['ruang'] as String,
+  );
 }
 
 class TugasMendesak {
@@ -45,28 +45,36 @@ class TugasMendesak {
   final String judul, tenggat, matakuliah;
 
   factory TugasMendesak.dariJson(Map<String, dynamic> j) => TugasMendesak(
-        id: keInt(j['id']),
-        judul: j['judul'] as String,
-        tenggat: j['tenggat'] as String,
-        kelasId: keInt(j['kelas_id']),
-        matakuliah: j['matakuliah'] as String,
-        sisaJam: keInt(j['sisa_jam']),
-      );
+    id: keInt(j['id']),
+    judul: j['judul'] as String,
+    tenggat: j['tenggat'] as String,
+    kelasId: keInt(j['kelas_id']),
+    matakuliah: j['matakuliah'] as String,
+    sisaJam: keInt(j['sisa_jam']),
+  );
 }
 
 class InfoKampus {
-  const InfoKampus({required this.judul, required this.isi, required this.dibuat});
+  const InfoKampus({
+    required this.judul,
+    required this.isi,
+    required this.dibuat,
+  });
   final String judul, isi, dibuat;
 
   factory InfoKampus.dariJson(Map<String, dynamic> j) => InfoKampus(
-        judul: j['judul'] as String,
-        isi: j['isi'] as String,
-        dibuat: j['dibuat'] as String,
-      );
+    judul: j['judul'] as String,
+    isi: j['isi'] as String,
+    dibuat: j['dibuat'] as String,
+  );
 }
 
 class RingkasanHarian {
-  const RingkasanHarian({required this.pengumuman, required this.tugas, required this.belumDibaca});
+  const RingkasanHarian({
+    required this.pengumuman,
+    required this.tugas,
+    required this.belumDibaca,
+  });
   final int pengumuman, tugas, belumDibaca;
 }
 
@@ -83,12 +91,12 @@ class TagihanRingkas {
   final bool terlambat;
 
   factory TagihanRingkas.dariJson(Map<String, dynamic> j) => TagihanRingkas(
-        id: keInt(j['id']),
-        jenis: j['jenis'] as String,
-        nominal: keInt(j['nominal']),
-        jatuhTempo: j['jatuh_tempo'] as String,
-        terlambat: j['terlambat'] == true,
-      );
+    id: keInt(j['id']),
+    jenis: j['jenis'] as String,
+    nominal: keInt(j['nominal']),
+    jatuhTempo: j['jatuh_tempo'] as String,
+    terlambat: j['terlambat'] == true,
+  );
 }
 
 class BukuJatuhTempo {
@@ -104,12 +112,12 @@ class BukuJatuhTempo {
   final bool terlambat;
 
   factory BukuJatuhTempo.dariJson(Map<String, dynamic> j) => BukuJatuhTempo(
-        id: keInt(j['id']),
-        judul: j['judul'] as String,
-        jatuhTempo: j['jatuh_tempo'] as String,
-        terlambat: j['terlambat'] == true,
-        sisaJam: keInt(j['sisa_jam']),
-      );
+    id: keInt(j['id']),
+    judul: j['judul'] as String,
+    jatuhTempo: j['jatuh_tempo'] as String,
+    terlambat: j['terlambat'] == true,
+    sisaJam: keInt(j['sisa_jam']),
+  );
 }
 
 class HariIni {
@@ -140,11 +148,26 @@ class HariIni {
       nama: j['nama'] as String,
       ipk: (j['ipk'] as num).toDouble(),
       sks: keInt(j['sks']),
-      jadwal: [for (final x in j['jadwal'] as List) JadwalHariIni.dariJson(x as Map<String, dynamic>)],
-      tugas: [for (final x in j['tugas'] as List) TugasMendesak.dariJson(x as Map<String, dynamic>)],
-      info: [for (final x in j['info'] as List) InfoKampus.dariJson(x as Map<String, dynamic>)],
-      tagihan: [for (final x in j['tagihan'] as List) TagihanRingkas.dariJson(x as Map<String, dynamic>)],
-      buku: [for (final x in j['buku'] as List) BukuJatuhTempo.dariJson(x as Map<String, dynamic>)],
+      jadwal: [
+        for (final x in j['jadwal'] as List)
+          JadwalHariIni.dariJson(x as Map<String, dynamic>),
+      ],
+      tugas: [
+        for (final x in j['tugas'] as List)
+          TugasMendesak.dariJson(x as Map<String, dynamic>),
+      ],
+      info: [
+        for (final x in j['info'] as List)
+          InfoKampus.dariJson(x as Map<String, dynamic>),
+      ],
+      tagihan: [
+        for (final x in j['tagihan'] as List)
+          TagihanRingkas.dariJson(x as Map<String, dynamic>),
+      ],
+      buku: [
+        for (final x in j['buku'] as List)
+          BukuJatuhTempo.dariJson(x as Map<String, dynamic>),
+      ],
       ringkasan: RingkasanHarian(
         pengumuman: keInt(r['pengumuman']),
         tugas: keInt(r['tugas']),
@@ -158,5 +181,6 @@ class HariIniRepository {
   HariIniRepository(this._api);
   final ApiClient _api;
 
-  Future<HariIni> ambil() async => HariIni.dariJson(await _api.kirim('GET', 'hari_ini.php'));
+  Future<HariIni> ambil() async =>
+      HariIni.dariJson(await _api.kirim('GET', 'hari_ini.php'));
 }

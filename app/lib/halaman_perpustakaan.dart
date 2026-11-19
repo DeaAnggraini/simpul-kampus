@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+
 import 'api_client.dart';
 import 'format.dart';
 import 'kelas.dart' show formatWaktu;
@@ -24,7 +25,11 @@ class _HalamanPerpustakaanState extends State<HalamanPerpustakaan>
   @override
   void initState() {
     super.initState();
-    _tab = TabController(length: 2, vsync: this, initialIndex: widget.tabAwal == 1 ? 1 : 0);
+    _tab = TabController(
+      length: 2,
+      vsync: this,
+      initialIndex: widget.tabAwal == 1 ? 1 : 0,
+    );
     _muat();
   }
 
@@ -70,7 +75,9 @@ class _HalamanPerpustakaanState extends State<HalamanPerpustakaan>
   Future<void> _kembalikan(Pinjaman p) async {
     try {
       final denda = await widget.repo.kembalikan(p.id);
-      _info(denda > 0 ? 'Dikembalikan. Denda ${denda.rupiah}.' : 'Dikembalikan.');
+      _info(
+        denda > 0 ? 'Dikembalikan. Denda ${denda.rupiah}.' : 'Dikembalikan.',
+      );
       await _muat();
     } on ApiGagal catch (e) {
       _info(e.pesan);
@@ -80,50 +87,53 @@ class _HalamanPerpustakaanState extends State<HalamanPerpustakaan>
   Widget _aksi(Buku b) {
     if (b.dipinjamSaya) return const Chip(label: Text('Dipinjam'));
     if (b.tersedia <= 0) return const Chip(label: Text('Habis'));
-    return FilledButton.tonal(onPressed: () => _pinjam(b), child: const Text('Pinjam'));
+    return FilledButton.tonal(
+      onPressed: () => _pinjam(b),
+      child: const Text('Pinjam'),
+    );
   }
 
   Widget _katalog(List<Buku> buku) => Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: TextField(
-              controller: _cari,
-              textInputAction: TextInputAction.search,
-              onSubmitted: (_) => _muat(),
-              decoration: const InputDecoration(
-                hintText: 'Cari judul, penulis, atau kategori',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
+    children: [
+      Padding(
+        padding: const EdgeInsets.all(12),
+        child: TextField(
+          controller: _cari,
+          textInputAction: TextInputAction.search,
+          onSubmitted: (_) => _muat(),
+          decoration: const InputDecoration(
+            hintText: 'Cari judul, penulis, atau kategori',
+            prefixIcon: Icon(Icons.search),
+            border: OutlineInputBorder(),
+          ),
+        ),
+      ),
+      Expanded(
+        child: buku.isEmpty
+            ? const Center(child: Text('Buku tidak ditemukan.'))
+            : ListView.builder(
+                itemCount: buku.length,
+                itemBuilder: (context, i) {
+                  final b = buku[i];
+                  return ListTile(
+                    isThreeLine: true,
+                    title: Text(b.judul),
+                    subtitle: Text(
+                      '${b.penulis} · ${b.kategori}${b.tahun == null ? '' : ' · ${b.tahun}'}\n'
+                      'Tersedia ${b.tersedia}',
+                    ),
+                    trailing: _aksi(b),
+                  );
+                },
               ),
-            ),
-          ),
-          Expanded(
-            child: buku.isEmpty
-                ? const Center(child: Text('Buku tidak ditemukan.'))
-                : ListView.builder(
-                    itemCount: buku.length,
-                    itemBuilder: (context, i) {
-                      final b = buku[i];
-                      return ListTile(
-                        isThreeLine: true,
-                        title: Text(b.judul),
-                        subtitle: Text(
-                          '${b.penulis} · ${b.kategori}${b.tahun == null ? '' : ' · ${b.tahun}'}\n'
-                          'Tersedia ${b.tersedia}',
-                        ),
-                        trailing: _aksi(b),
-                      );
-                    },
-                  ),
-          ),
-        ],
-      );
+      ),
+    ],
+  );
 
   Widget _judul(String teks) => Padding(
-        padding: const EdgeInsets.fromLTRB(4, 20, 4, 8),
-        child: Text(teks, style: Theme.of(context).textTheme.titleMedium),
-      );
+    padding: const EdgeInsets.fromLTRB(4, 20, 4, 8),
+    child: Text(teks, style: Theme.of(context).textTheme.titleMedium),
+  );
 
   Widget _tabPinjaman(DaftarPinjaman p) {
     final skema = Theme.of(context).colorScheme;
@@ -146,7 +156,10 @@ class _HalamanPerpustakaanState extends State<HalamanPerpustakaan>
             ),
           ),
           _judul('Sedang dipinjam (${p.aktif.length})'),
-          if (p.aktif.isEmpty) const Card(child: ListTile(title: Text('Tidak ada pinjaman aktif.'))),
+          if (p.aktif.isEmpty)
+            const Card(
+              child: ListTile(title: Text('Tidak ada pinjaman aktif.')),
+            ),
           for (final x in p.aktif)
             Card(
               child: ListTile(
@@ -169,7 +182,8 @@ class _HalamanPerpustakaanState extends State<HalamanPerpustakaan>
               ),
             ),
           _judul('Riwayat'),
-          if (p.riwayat.isEmpty) const Card(child: ListTile(title: Text('Belum ada riwayat.'))),
+          if (p.riwayat.isEmpty)
+            const Card(child: ListTile(title: Text('Belum ada riwayat.'))),
           for (final x in p.riwayat)
             Card(
               child: ListTile(
@@ -198,7 +212,10 @@ class _HalamanPerpustakaanState extends State<HalamanPerpustakaan>
             children: [
               const Icon(Icons.cloud_off, size: 48),
               const SizedBox(height: 12),
-              Text(_galat ?? 'Data tidak tersedia.', textAlign: TextAlign.center),
+              Text(
+                _galat ?? 'Data tidak tersedia.',
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(height: 12),
               FilledButton(
                 onPressed: () {
@@ -212,7 +229,10 @@ class _HalamanPerpustakaanState extends State<HalamanPerpustakaan>
         ),
       );
     }
-    return TabBarView(controller: _tab, children: [_katalog(buku), _tabPinjaman(pinjaman)]);
+    return TabBarView(
+      controller: _tab,
+      children: [_katalog(buku), _tabPinjaman(pinjaman)],
+    );
   }
 
   @override
@@ -222,7 +242,10 @@ class _HalamanPerpustakaanState extends State<HalamanPerpustakaan>
         title: const Text('Perpustakaan'),
         bottom: TabBar(
           controller: _tab,
-          tabs: const [Tab(text: 'Katalog'), Tab(text: 'Pinjaman saya')],
+          tabs: const [
+            Tab(text: 'Katalog'),
+            Tab(text: 'Pinjaman saya'),
+          ],
         ),
       ),
       body: _isi(),

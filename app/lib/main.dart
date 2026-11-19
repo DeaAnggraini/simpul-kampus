@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+
 import 'api_client.dart';
 import 'auth_service.dart';
 import 'router.dart';
@@ -18,11 +19,16 @@ class SimpulApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const benih = Color(0xFF00796B);
     return MaterialApp.router(
       title: 'Simpul Kampus',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF00796B)),
+      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: benih)),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: benih,
+          brightness: Brightness.dark,
+        ),
       ),
       routerConfig: router,
     );

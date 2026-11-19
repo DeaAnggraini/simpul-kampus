@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+
 import 'kelas.dart';
 import 'pemuat_data.dart';
 
@@ -27,7 +28,9 @@ class HalamanKelas extends StatelessWidget {
                 child: ListTile(
                   leading: CircleAvatar(child: Text(k.kelas)),
                   title: Text(k.nama),
-                  subtitle: Text('${k.jadwal} · ${k.ruang}\n${k.dosen} · ${k.jumlahAnggota} mahasiswa'),
+                  subtitle: Text(
+                    '${k.jadwal} · ${k.ruang}\n${k.dosen} · ${k.jumlahAnggota} mahasiswa',
+                  ),
                   isThreeLine: true,
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => context.push('/kelas/${k.id}'),

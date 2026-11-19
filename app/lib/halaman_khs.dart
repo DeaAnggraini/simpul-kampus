@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+
 import 'akademik.dart';
 import 'pemuat_data.dart';
 
@@ -15,15 +16,23 @@ class HalamanKhs extends StatelessWidget {
         ambil: repo.ambilKhs,
         builder: (context, khs) {
           if (khs.daftar.isEmpty) {
-            return ListView(children: const [
-              Padding(padding: EdgeInsets.all(24), child: Text('Belum ada data KHS.')),
-            ]);
+            return ListView(
+              children: const [
+                Padding(
+                  padding: EdgeInsets.all(24),
+                  child: Text('Belum ada data KHS.'),
+                ),
+              ],
+            );
           }
           final urut = khs.daftar.reversed.toList(); // terbaru di atas
           return ListView(
             children: [
               ListTile(
-                title: Text('IPK ${khs.ipk.toStringAsFixed(2)}', style: teks.titleLarge),
+                title: Text(
+                  'IPK ${khs.ipk.toStringAsFixed(2)}',
+                  style: teks.titleLarge,
+                ),
                 subtitle: Text('${khs.sksTotal} SKS tempuh'),
               ),
               const Divider(height: 1),
@@ -31,9 +40,11 @@ class HalamanKhs extends StatelessWidget {
                 ExpansionTile(
                   initiallyExpanded: i == 0,
                   title: Text(urut[i].judul),
-                  subtitle: Text(urut[i].ips == null
-                      ? 'Nilai belum keluar'
-                      : 'IPS ${urut[i].ips!.toStringAsFixed(2)} · ${urut[i].sks} SKS'),
+                  subtitle: Text(
+                    urut[i].ips == null
+                        ? 'Nilai belum keluar'
+                        : 'IPS ${urut[i].ips!.toStringAsFixed(2)} · ${urut[i].sks} SKS',
+                  ),
                   children: [
                     for (final m in urut[i].matakuliah)
                       ListTile(

@@ -1,6 +1,15 @@
 import 'api_client.dart';
 
-const namaHari = ['', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+const namaHari = [
+  '',
+  'Senin',
+  'Selasa',
+  'Rabu',
+  'Kamis',
+  'Jumat',
+  'Sabtu',
+  'Minggu',
+];
 
 class KelasTawaran {
   const KelasTawaran({
@@ -34,38 +43,42 @@ class KelasTawaran {
       lain.mulai.compareTo(selesai) < 0;
 
   factory KelasTawaran.dariJson(Map<String, dynamic> j) => KelasTawaran(
-        kelasId: keInt(j['kelas_id']),
-        mkId: keInt(j['mk_id']),
-        kode: j['kode'] as String,
-        nama: j['nama'] as String,
-        sks: keInt(j['sks']),
-        kelas: j['kelas'] as String,
-        dosen: j['dosen'] as String,
-        hari: keInt(j['hari']),
-        mulai: (j['jam_mulai'] as String).substring(0, 5),
-        selesai: (j['jam_selesai'] as String).substring(0, 5),
-        ruang: j['ruang'] as String,
-        kuota: keInt(j['kuota']),
-        terisi: keInt(j['terisi']),
-        diambil: j['diambil'] == true,
-        sudahLulus: j['sudah_lulus'] == true,
-      );
+    kelasId: keInt(j['kelas_id']),
+    mkId: keInt(j['mk_id']),
+    kode: j['kode'] as String,
+    nama: j['nama'] as String,
+    sks: keInt(j['sks']),
+    kelas: j['kelas'] as String,
+    dosen: j['dosen'] as String,
+    hari: keInt(j['hari']),
+    mulai: (j['jam_mulai'] as String).substring(0, 5),
+    selesai: (j['jam_selesai'] as String).substring(0, 5),
+    ruang: j['ruang'] as String,
+    kuota: keInt(j['kuota']),
+    terisi: keInt(j['terisi']),
+    diambil: j['diambil'] == true,
+    sudahLulus: j['sudah_lulus'] == true,
+  );
 }
 
 class DataKrs {
-  const DataKrs({required this.tahun, required this.batasSks, required this.kelas});
+  const DataKrs({
+    required this.tahun,
+    required this.batasSks,
+    required this.kelas,
+  });
   final String tahun;
   final int batasSks;
   final List<KelasTawaran> kelas;
 
   factory DataKrs.dariJson(Map<String, dynamic> j) => DataKrs(
-        tahun: j['tahun'] as String,
-        batasSks: keInt(j['batas_sks']),
-        kelas: [
-          for (final x in j['data'] as List)
-            KelasTawaran.dariJson(x as Map<String, dynamic>)
-        ],
-      );
+    tahun: j['tahun'] as String,
+    batasSks: keInt(j['batas_sks']),
+    kelas: [
+      for (final x in j['data'] as List)
+        KelasTawaran.dariJson(x as Map<String, dynamic>),
+    ],
+  );
 }
 
 class KrsRepository {
@@ -76,7 +89,11 @@ class KrsRepository {
       DataKrs.dariJson(await _api.kirim('GET', 'krs.php'));
 
   Future<int> simpan(List<int> kelasIds) async {
-    final d = await _api.kirim('POST', 'krs.php', body: {'kelas_ids': kelasIds});
+    final d = await _api.kirim(
+      'POST',
+      'krs.php',
+      body: {'kelas_ids': kelasIds},
+    );
     return keInt(d['total_sks']);
   }
 }

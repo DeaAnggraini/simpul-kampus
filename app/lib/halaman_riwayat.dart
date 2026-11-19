@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+
 import 'akademik.dart';
 import 'pemuat_data.dart';
 
@@ -31,9 +32,13 @@ class HalamanRiwayat extends StatelessWidget {
                       else ...[
                         LinearProgressIndicator(value: s.ips! / 4),
                         const SizedBox(height: 8),
-                        Text('IPS ${s.ips!.toStringAsFixed(2)} · '
-                            'IPK ${s.ipk!.toStringAsFixed(2)}'),
-                        Text('${s.sks} SKS semester · ${s.sksKumulatif} SKS kumulatif'),
+                        Text(
+                          'IPS ${s.ips!.toStringAsFixed(2)} · '
+                          'IPK ${s.ipk!.toStringAsFixed(2)}',
+                        ),
+                        Text(
+                          '${s.sks} SKS semester · ${s.sksKumulatif} SKS kumulatif',
+                        ),
                       ],
                     ],
                   ),

@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+
 import 'berita.dart';
 import 'kelas.dart' show formatWaktu;
 import 'pemuat_data.dart';
@@ -19,11 +20,16 @@ class HalamanDetailBerita extends StatelessWidget {
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.all(16),
           children: [
-            Align(alignment: Alignment.centerLeft, child: Chip(label: Text(b.kategori))),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Chip(label: Text(b.kategori)),
+            ),
             const SizedBox(height: 8),
             Text(b.judul, style: teks.headlineSmall),
             const SizedBox(height: 4),
-            Text('${formatWaktu(b.dibuat)}${b.penulis == null ? '' : ' · ${b.penulis}'}'),
+            Text(
+              '${formatWaktu(b.dibuat)}${b.penulis == null ? '' : ' · ${b.penulis}'}',
+            ),
             const Divider(height: 32),
             Text(b.isi, style: teks.bodyLarge),
           ],

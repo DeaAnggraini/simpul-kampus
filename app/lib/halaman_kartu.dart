@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+
 import 'akademik.dart';
 import 'pemuat_data.dart';
 
@@ -29,10 +30,17 @@ class HalamanKartu extends StatelessWidget {
                     Container(
                       color: Colors.white,
                       padding: const EdgeInsets.all(12),
-                      child: QrImageView(data: 'SIMPUL-PUSTAKA:${p.nim}', size: 220),
+                      child: QrImageView(
+                        data: 'SIMPUL-PUSTAKA:${p.nim}',
+                        size: 220,
+                      ),
                     ),
                     const SizedBox(height: 16),
-                    Text(p.nama, style: teks.titleLarge, textAlign: TextAlign.center),
+                    Text(
+                      p.nama,
+                      style: teks.titleLarge,
+                      textAlign: TextAlign.center,
+                    ),
                     Text('${p.nim} · ${p.prodi}', textAlign: TextAlign.center),
                   ],
                 ),
@@ -40,7 +48,9 @@ class HalamanKartu extends StatelessWidget {
             ),
             const Padding(
               padding: EdgeInsets.all(12),
-              child: Text('Tunjukkan kode ini kepada petugas saat meminjam atau masuk perpustakaan.'),
+              child: Text(
+                'Tunjukkan kode ini kepada petugas saat meminjam atau masuk perpustakaan.',
+              ),
             ),
           ],
         ),

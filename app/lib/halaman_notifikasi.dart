@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+
 import 'api_client.dart';
 import 'kelas.dart' show formatWaktu;
 import 'notifikasi.dart';
@@ -47,9 +48,12 @@ class _HalamanNotifikasiState extends State<HalamanNotifikasi> {
       try {
         await widget.repo.tandaiBaca(n.id);
         if (!mounted) return;
-        setState(() => _daftar = [
-              for (final x in _daftar ?? const <Notifikasi>[]) x.id == n.id ? x.sudahDibaca() : x
-            ]);
+        setState(
+          () => _daftar = [
+            for (final x in _daftar ?? const <Notifikasi>[])
+              x.id == n.id ? x.sudahDibaca() : x,
+          ],
+        );
       } on ApiGagal catch (e) {
         _info(e.pesan);
         return;
@@ -78,7 +82,10 @@ class _HalamanNotifikasiState extends State<HalamanNotifikasi> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(_galat ?? 'Data tidak tersedia.', textAlign: TextAlign.center),
+              Text(
+                _galat ?? 'Data tidak tersedia.',
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(height: 12),
               FilledButton(
                 onPressed: () {
@@ -98,21 +105,36 @@ class _HalamanNotifikasiState extends State<HalamanNotifikasi> {
       child: daftar.isEmpty
           ? ListView(
               physics: const AlwaysScrollableScrollPhysics(),
-              children: const [Padding(padding: EdgeInsets.all(24), child: Text('Belum ada notifikasi.'))],
+              children: const [
+                Padding(
+                  padding: EdgeInsets.all(24),
+                  child: Text('Belum ada notifikasi.'),
+                ),
+              ],
             )
           : ListView(
               physics: const AlwaysScrollableScrollPhysics(),
               children: [
                 for (final n in daftar)
                   ListTile(
-                    leading: Icon(n.jenis == 'tugas' ? Icons.assignment_outlined : Icons.campaign_outlined),
+                    leading: Icon(
+                      n.jenis == 'tugas'
+                          ? Icons.assignment_outlined
+                          : Icons.campaign_outlined,
+                    ),
                     title: Text(
                       n.judul,
-                      style: TextStyle(fontWeight: n.dibaca ? FontWeight.normal : FontWeight.bold),
+                      style: TextStyle(
+                        fontWeight: n.dibaca
+                            ? FontWeight.normal
+                            : FontWeight.bold,
+                      ),
                     ),
                     subtitle: Text('${n.isi}\n${formatWaktu(n.dibuat)}'),
                     isThreeLine: true,
-                    trailing: n.dibaca ? null : Icon(Icons.circle, size: 10, color: primer),
+                    trailing: n.dibaca
+                        ? null
+                        : Icon(Icons.circle, size: 10, color: primer),
                     onTap: () => _buka(n),
                   ),
               ],

@@ -1,7 +1,10 @@
 import 'format.dart';
+
 import 'dart:async';
+
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+
 import 'api_client.dart';
 import 'hari_ini.dart';
 import 'kelas.dart' show formatWaktu;
@@ -59,24 +62,24 @@ class _HalamanHariIniState extends State<HalamanHariIni> {
   }
 
   Widget _judul(String teks) => Padding(
-        padding: const EdgeInsets.fromLTRB(4, 20, 4, 8),
-        child: Text(teks, style: Theme.of(context).textTheme.titleMedium),
-      );
+    padding: const EdgeInsets.fromLTRB(4, 20, 4, 8),
+    child: Text(teks, style: Theme.of(context).textTheme.titleMedium),
+  );
 
   Widget _kosong(String teks) => Card(child: ListTile(title: Text(teks)));
 
   Widget _statistik(String label, String nilai) => Card(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(label),
-              Text(nilai, style: Theme.of(context).textTheme.headlineMedium),
-            ],
-          ),
-        ),
-      );
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label),
+          Text(nilai, style: Theme.of(context).textTheme.headlineMedium),
+        ],
+      ),
+    ),
+  );
 
   Widget _isi(HariIni d) {
     final skema = Theme.of(context).colorScheme;
@@ -88,7 +91,10 @@ class _HalamanHariIniState extends State<HalamanHariIni> {
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.all(16),
         children: [
-          Text('Halo, ${d.nama}', style: Theme.of(context).textTheme.headlineSmall),
+          Text(
+            'Halo, ${d.nama}',
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
           const SizedBox(height: 12),
           Row(
             children: [
@@ -103,10 +109,12 @@ class _HalamanHariIniState extends State<HalamanHariIni> {
             child: ListTile(
               leading: const Icon(Icons.today),
               title: const Text('Ringkasan 24 jam terakhir'),
-              subtitle: Text(adaKabar
-                  ? '${r.pengumuman} pengumuman dan ${r.tugas} tugas baru. '
-                      '${r.belumDibaca} notifikasi belum dibaca.'
-                  : 'Tidak ada kabar baru. ${r.belumDibaca} notifikasi belum dibaca.'),
+              subtitle: Text(
+                adaKabar
+                    ? '${r.pengumuman} pengumuman dan ${r.tugas} tugas baru. '
+                          '${r.belumDibaca} notifikasi belum dibaca.'
+                    : 'Tidak ada kabar baru. ${r.belumDibaca} notifikasi belum dibaca.',
+              ),
               isThreeLine: true,
               onTap: _bukaNotifikasi,
             ),
@@ -117,7 +125,9 @@ class _HalamanHariIniState extends State<HalamanHariIni> {
             Card(
               child: ListTile(
                 title: Text(j.nama),
-                subtitle: Text('${j.mulai} sampai ${j.selesai} · ${j.ruang}\n${j.dosen}'),
+                subtitle: Text(
+                  '${j.mulai} sampai ${j.selesai} · ${j.ruang}\n${j.dosen}',
+                ),
                 isThreeLine: true,
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => context.go('/kelas/${j.kelasId}'),
@@ -128,9 +138,14 @@ class _HalamanHariIniState extends State<HalamanHariIni> {
           for (final t in d.tugas)
             Card(
               child: ListTile(
-                leading: Icon(Icons.assignment_outlined, color: t.sisaJam < 24 ? skema.error : null),
+                leading: Icon(
+                  Icons.assignment_outlined,
+                  color: t.sisaJam < 24 ? skema.error : null,
+                ),
                 title: Text(t.judul),
-                subtitle: Text('${t.matakuliah} · tenggat ${formatWaktu(t.tenggat)}'),
+                subtitle: Text(
+                  '${t.matakuliah} · tenggat ${formatWaktu(t.tenggat)}',
+                ),
                 trailing: Text(
                   sisaWaktu(t.sisaJam),
                   style: TextStyle(color: t.sisaJam < 24 ? skema.error : null),
@@ -143,7 +158,10 @@ class _HalamanHariIniState extends State<HalamanHariIni> {
             for (final t in d.tagihan)
               Card(
                 child: ListTile(
-                  leading: Icon(Icons.receipt_long_outlined, color: t.terlambat ? skema.error : null),
+                  leading: Icon(
+                    Icons.receipt_long_outlined,
+                    color: t.terlambat ? skema.error : null,
+                  ),
                   title: Text('${t.jenis} · ${t.nominal.rupiah}'),
                   subtitle: Text('Jatuh tempo ${formatWaktu(t.jatuhTempo)}'),
                   trailing: t.terlambat
@@ -158,7 +176,10 @@ class _HalamanHariIniState extends State<HalamanHariIni> {
             for (final b in d.buku)
               Card(
                 child: ListTile(
-                  leading: Icon(Icons.menu_book_outlined, color: b.terlambat ? skema.error : null),
+                  leading: Icon(
+                    Icons.menu_book_outlined,
+                    color: b.terlambat ? skema.error : null,
+                  ),
                   title: Text(b.judul),
                   subtitle: Text('Jatuh tempo ${formatWaktu(b.jatuhTempo)}'),
                   trailing: Text(
@@ -171,7 +192,10 @@ class _HalamanHariIniState extends State<HalamanHariIni> {
           ],
           _judul('Informasi kampus'),
           if (d.info.isEmpty) _kosong('Belum ada informasi.'),
-          for (final i in d.info) Card(child: ListTile(title: Text(i.judul), subtitle: Text(i.isi))),
+          for (final i in d.info)
+            Card(
+              child: ListTile(title: Text(i.judul), subtitle: Text(i.isi)),
+            ),
         ],
       ),
     );

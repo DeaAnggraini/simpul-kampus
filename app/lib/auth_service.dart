@@ -1,6 +1,8 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'api_client.dart';
 
 class Pengguna {
@@ -9,16 +11,19 @@ class Pengguna {
   final String nama;
   final String peran;
 
-  factory Pengguna.dariJson(Map<String, dynamic> j) =>
-      Pengguna(id: keInt(j['id']), nama: j['nama'] as String, peran: j['peran'] as String);
+  factory Pengguna.dariJson(Map<String, dynamic> j) => Pengguna(
+    id: keInt(j['id']),
+    nama: j['nama'] as String,
+    peran: j['peran'] as String,
+  );
 
   Map<String, dynamic> keJson() => {'id': id, 'nama': nama, 'peran': peran};
 }
 
 class AuthService extends ChangeNotifier {
   AuthService(this._api, {SharedPreferencesAsync? prefs})
-      : _prefs = prefs ?? SharedPreferencesAsync() {
-    _api.saatSesiHabis = keluar; 
+    : _prefs = prefs ?? SharedPreferencesAsync() {
+    _api.saatSesiHabis = keluar;
   }
 
   final ApiClient _api;
@@ -39,9 +44,14 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> masuk(String nim, String sandi) async {
-    final data = await _api.kirim('POST', 'masuk.php',
-        body: {'nim': nim, 'sandi': sandi});
-    final pengguna = Pengguna.dariJson(data['pengguna'] as Map<String, dynamic>);
+    final data = await _api.kirim(
+      'POST',
+      'masuk.php',
+      body: {'nim': nim, 'sandi': sandi},
+    );
+    final pengguna = Pengguna.dariJson(
+      data['pengguna'] as Map<String, dynamic>,
+    );
     _api.token = data['token'] as String;
     await _prefs.setString('token', _api.token!);
     await _prefs.setString('pengguna', jsonEncode(pengguna.keJson()));

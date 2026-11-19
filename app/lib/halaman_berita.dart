@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+
 import 'api_client.dart';
 import 'berita.dart';
 import 'form_berita.dart';
@@ -33,7 +34,10 @@ class _HalamanBeritaState extends State<HalamanBerita> {
 
   Future<void> _muat() async {
     try {
-      final d = await widget.repo.daftar(cari: _cari.text.trim(), kategori: _kategori);
+      final d = await widget.repo.daftar(
+        cari: _cari.text.trim(),
+        kategori: _kategori,
+      );
       if (!mounted) return;
       setState(() {
         _data = d;
@@ -69,13 +73,13 @@ class _HalamanBeritaState extends State<HalamanBerita> {
   }
 
   Widget _chip(String label, String? nilai) => Padding(
-        padding: const EdgeInsets.only(right: 8),
-        child: ChoiceChip(
-          label: Text(label),
-          selected: _kategori == nilai,
-          onSelected: (_) => _pilih(nilai),
-        ),
-      );
+    padding: const EdgeInsets.only(right: 8),
+    child: ChoiceChip(
+      label: Text(label),
+      selected: _kategori == nilai,
+      onSelected: (_) => _pilih(nilai),
+    ),
+  );
 
   Widget _isi() {
     final d = _data;
@@ -89,7 +93,10 @@ class _HalamanBeritaState extends State<HalamanBerita> {
             children: [
               const Icon(Icons.cloud_off, size: 48),
               const SizedBox(height: 12),
-              Text(_galat ?? 'Data tidak tersedia.', textAlign: TextAlign.center),
+              Text(
+                _galat ?? 'Data tidak tersedia.',
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(height: 12),
               FilledButton(
                 onPressed: () {
@@ -135,7 +142,12 @@ class _HalamanBeritaState extends State<HalamanBerita> {
             child: d.data.isEmpty
                 ? ListView(
                     physics: const AlwaysScrollableScrollPhysics(),
-                    children: const [Padding(padding: EdgeInsets.all(24), child: Text('Berita tidak ditemukan.'))],
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.all(24),
+                        child: Text('Berita tidak ditemukan.'),
+                      ),
+                    ],
                   )
                 : ListView(
                     physics: const AlwaysScrollableScrollPhysics(),
@@ -146,9 +158,13 @@ class _HalamanBeritaState extends State<HalamanBerita> {
                           child: ListTile(
                             isThreeLine: true,
                             title: Text(n.judul),
-                            subtitle: Text('${n.kategori} · ${formatWaktu(n.dibuat)}\n${n.ringkas}',
-                                maxLines: 3, overflow: TextOverflow.ellipsis),
-                            onTap: () => context.push('/layanan/berita/${n.id}'),
+                            subtitle: Text(
+                              '${n.kategori} · ${formatWaktu(n.dibuat)}\n${n.ringkas}',
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            onTap: () =>
+                                context.push('/layanan/berita/${n.id}'),
                           ),
                         ),
                     ],

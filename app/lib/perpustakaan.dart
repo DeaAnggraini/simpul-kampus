@@ -16,14 +16,14 @@ class Buku {
   final bool dipinjamSaya;
 
   factory Buku.dariJson(Map<String, dynamic> j) => Buku(
-        id: keInt(j['id']),
-        judul: j['judul'] as String,
-        penulis: j['penulis'] as String,
-        kategori: j['kategori'] as String,
-        tersedia: keInt(j['tersedia']),
-        dipinjamSaya: j['dipinjam_saya'] == true,
-        tahun: j['tahun'] == null ? null : keInt(j['tahun']),
-      );
+    id: keInt(j['id']),
+    judul: j['judul'] as String,
+    penulis: j['penulis'] as String,
+    kategori: j['kategori'] as String,
+    tersedia: keInt(j['tersedia']),
+    dipinjamSaya: j['dipinjam_saya'] == true,
+    tahun: j['tahun'] == null ? null : keInt(j['tahun']),
+  );
 }
 
 class Pinjaman {
@@ -42,14 +42,14 @@ class Pinjaman {
   final bool terlambat;
 
   factory Pinjaman.dariJson(Map<String, dynamic> j) => Pinjaman(
-        id: keInt(j['id']),
-        judul: j['judul'] as String,
-        jatuhTempo: j['jatuh_tempo'] as String,
-        terlambat: j['terlambat'] == true,
-        hariTelat: keInt(j['hari_telat']),
-        denda: keInt(j['denda']),
-        dikembalikan: j['dikembalikan'] as String?,
-      );
+    id: keInt(j['id']),
+    judul: j['judul'] as String,
+    jatuhTempo: j['jatuh_tempo'] as String,
+    terlambat: j['terlambat'] == true,
+    hariTelat: keInt(j['hari_telat']),
+    denda: keInt(j['denda']),
+    dikembalikan: j['dikembalikan'] as String?,
+  );
 }
 
 class DaftarPinjaman {
@@ -65,13 +65,19 @@ class DaftarPinjaman {
   final int dendaBerjalan, maks, lamaHari, dendaPerHari;
 
   factory DaftarPinjaman.dariJson(Map<String, dynamic> j) => DaftarPinjaman(
-        aktif: [for (final x in j['aktif'] as List) Pinjaman.dariJson(x as Map<String, dynamic>)],
-        riwayat: [for (final x in j['riwayat'] as List) Pinjaman.dariJson(x as Map<String, dynamic>)],
-        dendaBerjalan: keInt(j['denda_berjalan']),
-        maks: keInt(j['maks_pinjam']),
-        lamaHari: keInt(j['lama_hari']),
-        dendaPerHari: keInt(j['denda_per_hari']),
-      );
+    aktif: [
+      for (final x in j['aktif'] as List)
+        Pinjaman.dariJson(x as Map<String, dynamic>),
+    ],
+    riwayat: [
+      for (final x in j['riwayat'] as List)
+        Pinjaman.dariJson(x as Map<String, dynamic>),
+    ],
+    dendaBerjalan: keInt(j['denda_berjalan']),
+    maks: keInt(j['maks_pinjam']),
+    lamaHari: keInt(j['lama_hari']),
+    dendaPerHari: keInt(j['denda_per_hari']),
+  );
 }
 
 class PerpustakaanRepository {
@@ -79,8 +85,15 @@ class PerpustakaanRepository {
   final ApiClient _api;
 
   Future<List<Buku>> cari(String q) async {
-    final d = await _api.kirim('GET', 'buku.php', query: {if (q.isNotEmpty) 'q': q});
-    return [for (final x in d['data'] as List) Buku.dariJson(x as Map<String, dynamic>)];
+    final d = await _api.kirim(
+      'GET',
+      'buku.php',
+      query: {if (q.isNotEmpty) 'q': q},
+    );
+    return [
+      for (final x in d['data'] as List)
+        Buku.dariJson(x as Map<String, dynamic>),
+    ];
   }
 
   Future<DaftarPinjaman> daftarPinjaman() async =>
@@ -92,7 +105,11 @@ class PerpustakaanRepository {
 
   /// Mengembalikan jumlah denda dalam rupiah.
   Future<int> kembalikan(int peminjamanId) async {
-    final d = await _api.kirim('POST', 'pengembalian.php', body: {'peminjaman_id': peminjamanId});
+    final d = await _api.kirim(
+      'POST',
+      'pengembalian.php',
+      body: {'peminjaman_id': peminjamanId},
+    );
     return keInt(d['denda']);
   }
 }
